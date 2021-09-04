@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import NewsItems from "./NewsItems";
+import Spinner from "./Spinner";
+import PropTypes from "prop-types";
 
 export class News extends Component {
   constructor() {
@@ -12,32 +14,55 @@ export class News extends Component {
     };
   }
 
-  fetchNews = async (pageNo) => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${process.env.REACT_APP_API_KEY}&page=${pageNo}&pageSize=20`;
+  static defaultProps = {
+    pageSize: 9,
+    category: "general",
+    country: "in",
+  };
+
+  static propTypes = {
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+    country: PropTypes.string,
+  };
+
+  fetchNews = async (pageNo, pageSize) => {
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${process.env.REACT_APP_API_KEY}&page=${pageNo}&pageSize=${pageSize}`;
+    this.setState({ loading: true });
     let fatchedData = await fetch(url);
     let parsedData = await fatchedData.json();
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
+      loading: false,
     });
   };
 
   async componentDidMount() {
-    this.fetchNews(this.state.currentPage);
+    this.fetchNews(this.state.currentPage, this.props.pageSize);
   }
 
   goToPrevPage = async () => {
-    this.fetchNews(this.state.currentPage - 1);
-    this.setState({
-      currentPage: this.state.currentPage - 1,
-    });
+    if (this.state.currentPage > 1) {
+      this.fetchNews(this.state.currentPage - 1, this.props.pageSize);
+      this.setState({
+        currentPage: this.state.currentPage - 1,
+      });
+    }
+    document.documentElement.scrollTop = 0;
   };
 
   goToNextPage = async () => {
-    this.fetchNews(this.state.currentPage + 1);
-    this.setState({
-      currentPage: this.state.currentPage + 1,
-    });
+    if (
+      this.state.currentPage + 1 <=
+      Math.ceil(this.state.totalResults / this.props.pageSize)
+    ) {
+      this.fetchNews(this.state.currentPage + 1, this.props.pageSize);
+      this.setState({
+        currentPage: this.state.currentPage + 1,
+      });
+    }
+    document.documentElement.scrollTop = 0;
   };
 
   showNews(news) {
@@ -60,11 +85,12 @@ export class News extends Component {
     return (
       <>
         <div className="container mt-3">
-          <h2 className="text-center mt-2" style={{ width: "100%" }}>
-            NewsMonkey - TOP headlines
+          <h2 className="text-center mt-2">
+            {`NewsMonkey - TOP ${this.props.category} headlines`}
           </h2>
+          {this.state.loading ? <Spinner /> : null}
           <div className="row mt-3">
-            {this.state.articles.map(this.showNews)}
+            {this.state.loading ? null : this.state.articles.map(this.showNews)}
           </div>
         </div>
         <div className="container my-3 d-flex justify-content-between">
@@ -80,7 +106,7 @@ export class News extends Component {
             type="button"
             disabled={
               this.state.currentPage + 1 >
-              Math.ceil(this.state.totalResults / 20)
+              Math.ceil(this.state.totalResults / this.props.pageSize)
                 ? true
                 : false
             }
@@ -96,3 +122,4 @@ export class News extends Component {
 }
 
 export default News;
+// cerdatokne@biyac.com
