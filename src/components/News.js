@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import NewsItems from "./NewsItems";
 import Spinner from "./Spinner";
 import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export class News extends Component {
   constructor() {
     super();
     this.state = {
       articles: [],
-      loading: false,
+      loading: true,
       totalResults: 0,
       currentPage: 1,
     };
@@ -28,11 +29,10 @@ export class News extends Component {
 
   fetchNews = async (pageNo, pageSize) => {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${process.env.REACT_APP_API_KEY}&page=${pageNo}&pageSize=${pageSize}`;
-    this.setState({ loading: true });
     let fatchedData = await fetch(url);
     let parsedData = await fatchedData.json();
     this.setState({
-      articles: parsedData.articles,
+      articles: this.state.articles.concat(parsedData.articles),
       totalResults: parsedData.totalResults,
       loading: false,
     });
@@ -42,27 +42,9 @@ export class News extends Component {
     this.fetchNews(this.state.currentPage, this.props.pageSize);
   }
 
-  goToPrevPage = async () => {
-    if (this.state.currentPage > 1) {
-      this.fetchNews(this.state.currentPage - 1, this.props.pageSize);
-      this.setState({
-        currentPage: this.state.currentPage - 1,
-      });
-    }
-    document.documentElement.scrollTop = 0;
-  };
-
-  goToNextPage = async () => {
-    if (
-      this.state.currentPage + 1 <=
-      Math.ceil(this.state.totalResults / this.props.pageSize)
-    ) {
-      this.fetchNews(this.state.currentPage + 1, this.props.pageSize);
-      this.setState({
-        currentPage: this.state.currentPage + 1,
-      });
-    }
-    document.documentElement.scrollTop = 0;
+  fetchMoreData = () => {
+    this.setState({currentPage: this.state.currentPage + 1});
+    this.fetchNews(this.state.currentPage, this.props.pageSize);
   };
 
   showNews(news) {
@@ -75,6 +57,8 @@ export class News extends Component {
             imgLink={news.urlToImage}
             newsLink={news.url}
             publishedAt={news.publishedAt}
+            author={news.author}
+            source={news.source.name}
           />
         </div>
       </div>
@@ -88,33 +72,18 @@ export class News extends Component {
           <h2 className="text-center mt-2">
             {`NewsMonkey - TOP ${this.props.category} headlines`}
           </h2>
-          {this.state.loading ? <Spinner /> : null}
+          {this.state.loading ? <Spinner loadingType="landing" /> : null}
+            <InfiniteScroll
+              dataLength={this.state.articles.length}
+              next={this.fetchMoreData}
+              hasMore={this.state.articles.length !== this.state.totalResults}
+              loader={<Spinner loadingType="scroll" />}
+              style={{ overflow: "inherit" }}
+            >
           <div className="row mt-3">
-            {this.state.loading ? null : this.state.articles.map(this.showNews)}
+              {this.state.articles.map(this.showNews)}
           </div>
-        </div>
-        <div className="container my-3 d-flex justify-content-between">
-          <button
-            type="button"
-            disabled={this.state.currentPage <= 1 ? true : false}
-            className="btn btn-primary"
-            onClick={this.goToPrevPage}
-          >
-            &larr; Previous
-          </button>
-          <button
-            type="button"
-            disabled={
-              this.state.currentPage + 1 >
-              Math.ceil(this.state.totalResults / this.props.pageSize)
-                ? true
-                : false
-            }
-            className="btn btn-primary"
-            onClick={this.goToNextPage}
-          >
-            Next &rarr;
-          </button>
+            </InfiniteScroll>
         </div>
       </>
     );
@@ -122,4 +91,3 @@ export class News extends Component {
 }
 
 export default News;
-// cerdatokne@biyac.com
