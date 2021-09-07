@@ -28,14 +28,19 @@ export class News extends Component {
   };
 
   fetchNews = async (pageNo, pageSize) => {
+    this.props.changeProgress(10);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${process.env.REACT_APP_API_KEY}&page=${pageNo}&pageSize=${pageSize}`;
+    this.props.changeProgress(20);
     let fatchedData = await fetch(url);
+    this.props.changeProgress(50);
     let parsedData = await fatchedData.json();
+    this.props.changeProgress(80);
     this.setState({
       articles: this.state.articles.concat(parsedData.articles),
       totalResults: parsedData.totalResults,
       loading: false,
     });
+    this.props.changeProgress(100);
   };
 
   async componentDidMount() {
