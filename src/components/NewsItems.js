@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import defaultNewsImage from "../defaultNewsImage.jpg";
 
-export class NewsItems extends Component {
-  render() {
-    let { title, desc, imgLink, newsLink, publishedAt, author, source } =
-      this.props;
+function NewsItems (props) {
+
+    let { title, desc, imgLink, newsLink, publishedAt, author, source } = props;
 
     let timeConvert = (timee) => {
       timee = timee.split(":");
@@ -57,7 +56,6 @@ export class NewsItems extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default NewsItems;

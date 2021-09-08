@@ -1,44 +1,42 @@
-import React, { Component } from "react";
+import React from "react";
 import infinityLoader from "../InfinityLoader.gif";
 import PropTypes from "prop-types";
 
-export class Spinner extends Component {
-  static defaultProps = {
-    loadingType: "landing",
-  };
-
-  static propTypes = {
-    loadingType: PropTypes.string,
-  };
-
-  getHeight = () => {
-    if (this.props.loadingType === "landing") {
+const Spinner = (props) => {
+  const getHeight = () => {
+    if (props.loadingType === "landing") {
       return {
         height: "70vh",
       };
     }
-    if (this.props.loadingType === "scroll") {
+    if (props.loadingType === "scroll") {
       return {
         height: "15vh",
       };
     }
   };
 
-  render() {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={this.getHeight()}
-      >
-        <img
-          src={infinityLoader}
-          alt="infinityLoader"
-          height={this.props.loadingType==="scroll"?"90px":"150px"}
-          width={this.props.loadingType==="scroll"?"90px":"150px"}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={getHeight()}
+    >
+      <img
+        src={infinityLoader}
+        alt="infinityLoader"
+        height={props.loadingType === "scroll" ? "90px" : "150px"}
+        width={props.loadingType === "scroll" ? "90px" : "150px"}
+      />
+    </div>
+  );
+};
+
+Spinner.defaultProps = {
+  loadingType: "landing",
+};
+
+Spinner.propTypes = {
+  loadingType: PropTypes.string,
+};
 
 export default Spinner;
