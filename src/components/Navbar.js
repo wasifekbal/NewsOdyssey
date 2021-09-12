@@ -1,7 +1,38 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = (props) => {
+  
+  const [searchQuery, setSearchQuery] = useState('');
+
+  let history = useHistory();
+
+  const notMode = (mode) => {
+    if(mode==="light"){
+      return "dark";
+    }
+    else{
+      return "light";
+    }
+  }
+  
+  const changeMode = () => {
+    props.changeMode(notMode(props.mode));
+  }
+  
+  const handleSubmit= (event) => {
+    event.preventDefault();
+    if(searchQuery){
+      props.handleSearchQuery(searchQuery);
+      history.push("/search");
+    }
+  }
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    setSearchQuery(event.target.value);
+  }
+
   useEffect(() => {
     let navbar = document.getElementById("navbarSupportedContent");
     let navLinks = document.getElementsByClassName("nav-link");
@@ -15,10 +46,10 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <nav className={`navbar navbar-expand-lg navbar-${props.mode} bg-${props.mode} fixed-top border-bottom`}>
         <div className="container-fluid">
           <Link className="navbar-brand fs-4" to="/">
-            NewsMonkey
+            NewsMafia
           </Link>
           <button
             className="navbar-toggler"
@@ -31,13 +62,14 @@ const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent"
-          style={{transition: "all 0.5s ease-in-out"}}
+          <div
+            className="collapse navbar-collapse"
+            id="navbarSupportedContent"
           >
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/"
                 >
@@ -46,7 +78,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/business"
                 >
@@ -55,7 +87,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/entertainment"
                 >
@@ -64,7 +96,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/health"
                 >
@@ -73,7 +105,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/science"
                 >
@@ -82,7 +114,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/technology"
                 >
@@ -91,7 +123,7 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  className="nav-link text-capitalize"
+                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
                   style={{ fontWeight: "600" }}
                   to="/sports"
                 >
@@ -99,6 +131,34 @@ const Navbar = () => {
                 </Link>
               </li>
             </ul>
+            <form className="d-flex" onSubmit={handleSubmit}>
+              <input
+                className={`form-control me-2 bg-${props.mode} text-${notMode(props.mode)}`}
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                id="searchbox"
+                value={searchQuery}
+                onChange={handleChange}
+              />
+              <button className={`btn btn-outline-${props.mode==="light"?"success":"warning"}`} type="submit">
+                Search
+              </button>
+            </form>
+            <div className="form-check form-switch ms-sm-0 ms-lg-3 my-3 my-lg-0">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="flexSwitchCheckChecked"
+                onClick={changeMode}
+                />
+              <label
+                className={`form-check-label text-${notMode(props.mode)} text-capitalize`}
+                htmlFor="flexSwitchCheckChecked"
+              >
+                {notMode(props.mode)} Mode
+              </label>
+            </div>
           </div>
         </div>
       </nav>

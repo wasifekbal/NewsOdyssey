@@ -10,11 +10,18 @@ function News(props) {
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  let fetchNews = async (pageNo, pageSize) => {
-    props.setProgress(10);
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${process.env.REACT_APP_API_KEY}&page=${pageNo}&pageSize=${pageSize}`;
+  let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${process.env.REACT_APP_API_KEY}&pageSize=${props.pageSize}`;
+
+  let searchUrl = `https://newsapi.org/v2/everything?q=${props.searchQuery}&apiKey=${process.env.REACT_APP_API_KEY}&language=en&pageSize=${props.pageSize}`;
+  
+  if(props.searchQuery){
+    url = searchUrl;
+  }
+
+  let fetchNews = async (apiUrl, pageNo) => {
+    apiUrl += `&page=${pageNo}`;
     props.setProgress(20);
-    let fatchedData = await fetch(url);
+    let fatchedData = await fetch(apiUrl);
     props.setProgress(50);
     let parsedData = await fatchedData.json();
     props.setProgress(80);
@@ -25,18 +32,18 @@ function News(props) {
   };
 
   useEffect(() => {
-    fetchNews(currentPage, props.pageSize);
+    fetchNews(url, currentPage);
     // eslint-disable-next-line
   }, []);
 
   let fetchMoreData = () => {
-    fetchNews(currentPage + 1, props.pageSize);
+    fetchNews(url, currentPage + 1);
     setCurrentPage(currentPage + 1);
   };
 
   function showNews(news) {
     return (
-      <div className="col-md-4 mt-3" key={news.url}>
+      <div className="col col-lg-4 mt-3" key={news.url}>
         <div className="d-flex justify-content-center align-item-center">
           <NewsItems
             title={news.title}
@@ -46,17 +53,27 @@ function News(props) {
             publishedAt={news.publishedAt}
             author={news.author}
             source={news.source.name}
+            mode={props.mode}
           />
         </div>
       </div>
     );
   }
 
+  const getHeadlineTitle = () => {
+    if(props.searchQuery){
+      return `NewsMafia - Search results for ${props.searchQuery}`
+    }
+    else{
+      return `NewsMafia - TOP ${props.category} headlines`
+    }
+  }
+
   return (
     <>
       <div className="container" style={{marginTop: "4.375rem"}}>
-        <h2 className="text-center mt-2">
-          {`NewsMonkey - TOP ${props.category} headlines`}
+        <h2 className={`text-center mt-2 ${props.mode==="light"?"text-dark":"text-light"}`}>
+          {getHeadlineTitle()}
         </h2>
         {loading ? <Spinner loadingType="landing" /> : null}
         <InfiniteScroll
@@ -66,7 +83,7 @@ function News(props) {
           loader={<Spinner loadingType="scroll" />}
           style={{ overflow: "inherit" }}
         >
-          <div className="row mt-3">{articles.map(showNews)}</div>
+          <div className="row mt-2">{articles.map(showNews)}</div>
         </InfiniteScroll>
       </div>
     </>
@@ -74,15 +91,22 @@ function News(props) {
 }
 
 News.defaultProps = {
-  pageSize: 9,
+  searchQuery: "",
+  mode: "light",
+  setProgress: null,
   category: "general",
   country: "in",
+  pageSize: 9,
+
 };
 
 News.propTypes = {
-  pageSize: PropTypes.number,
+  searchQuery: PropTypes.string,
+  mode: PropTypes.string,
+  setProgress: PropTypes.func,
   category: PropTypes.string,
   country: PropTypes.string,
+  pageSize: PropTypes.number,
 };
 
 export default News;
