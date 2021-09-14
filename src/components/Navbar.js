@@ -2,36 +2,34 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 const Navbar = (props) => {
-  
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   let history = useHistory();
 
   const notMode = (mode) => {
-    if(mode==="light"){
+    if (mode === "light") {
       return "dark";
-    }
-    else{
+    } else {
       return "light";
     }
-  }
-  
+  };
+
   const changeMode = () => {
     props.changeMode(notMode(props.mode));
-  }
-  
-  const handleSubmit= (event) => {
+  };
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if(searchQuery){
+    if (searchQuery) {
       props.handleSearchQuery(searchQuery);
       history.push("/search");
     }
-  }
+  };
 
   const handleChange = (event) => {
     event.preventDefault();
     setSearchQuery(event.target.value);
-  }
+  };
 
   useEffect(() => {
     let navbar = document.getElementById("navbarSupportedContent");
@@ -46,10 +44,12 @@ const Navbar = (props) => {
 
   return (
     <div>
-      <nav className={`navbar navbar-expand-lg navbar-${props.mode} bg-${props.mode} fixed-top border-bottom`}>
+      <nav
+        className={`navbar navbar-expand-lg navbar-${props.mode} bg-${props.mode} fixed-top border-bottom`}
+      >
         <div className="container-fluid">
           <Link className="navbar-brand fs-4" to="/">
-            NewsMafia
+            NewsOdyssey
           </Link>
           <button
             className="navbar-toggler"
@@ -62,14 +62,13 @@ const Navbar = (props) => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div
-            className="collapse navbar-collapse"
-            id="navbarSupportedContent"
-          >
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/"
                 >
@@ -78,7 +77,9 @@ const Navbar = (props) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/business"
                 >
@@ -87,7 +88,9 @@ const Navbar = (props) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/entertainment"
                 >
@@ -96,7 +99,9 @@ const Navbar = (props) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/health"
                 >
@@ -105,7 +110,9 @@ const Navbar = (props) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/science"
                 >
@@ -114,7 +121,9 @@ const Navbar = (props) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/technology"
                 >
@@ -123,7 +132,9 @@ const Navbar = (props) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link text-capitalize text-${props.mode==="light"?"mute":"light"}`}
+                  className={`nav-link text-capitalize text-${
+                    props.mode === "light" ? "mute" : "light"
+                  }`}
                   style={{ fontWeight: "600" }}
                   to="/sports"
                 >
@@ -133,7 +144,9 @@ const Navbar = (props) => {
             </ul>
             <form className="d-flex" onSubmit={handleSubmit}>
               <input
-                className={`form-control me-2 bg-${props.mode} text-${notMode(props.mode)}`}
+                className={`form-control me-2 bg-${props.mode} text-${notMode(
+                  props.mode
+                )}`}
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
@@ -141,7 +154,12 @@ const Navbar = (props) => {
                 value={searchQuery}
                 onChange={handleChange}
               />
-              <button className={`btn btn-outline-${props.mode==="light"?"success":"warning"}`} type="submit">
+              <button
+                className={`btn btn-outline-${
+                  props.mode === "light" ? "success" : "warning"
+                }`}
+                type="submit"
+              >
                 Search
               </button>
             </form>
@@ -151,9 +169,11 @@ const Navbar = (props) => {
                 type="checkbox"
                 id="flexSwitchCheckChecked"
                 onClick={changeMode}
-                />
+              />
               <label
-                className={`form-check-label text-${notMode(props.mode)} text-capitalize`}
+                className={`form-check-label text-${notMode(
+                  props.mode
+                )} text-capitalize`}
                 htmlFor="flexSwitchCheckChecked"
               >
                 {notMode(props.mode)} Mode

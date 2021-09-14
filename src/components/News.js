@@ -62,10 +62,10 @@ function News(props) {
 
   const getHeadlineTitle = () => {
     if(props.searchQuery){
-      return `NewsMafia - Search results for ${props.searchQuery}`
+      return `NewsOdyssey - Search results for ${props.searchQuery}`
     }
     else{
-      return `NewsMafia - TOP ${props.category} headlines`
+      return `NewsOdyssey - TOP ${props.category} headlines`
     }
   }
 
