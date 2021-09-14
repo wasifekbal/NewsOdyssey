@@ -7,8 +7,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - It uses [News API](https://newsapi.org/) API to fetch all sorts of news.
 - It has both light mode and dark mode
 
-![LightMode](./lightMode.png)
-![DarkMode](./darkMode.png)
+![LightMode](./ss/lightMode.png)
+![DarkMode](./ss/darkMode.png)
 - It has a search box to search for a specific news
 
-![specificSearch](./searchFeature.png)
+![specificSearch](./ss/searchFeature.png)
