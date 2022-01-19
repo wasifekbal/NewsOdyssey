@@ -1,6 +1,6 @@
 # NewsOdyssey
 
-NewsOdyssey is a news web app that shows the latest news and headlines every day. From sports to politics and from technology to weather reports, all kinds of news are in one place.
+NewsOdyssey is a news web app that shows the latest news and headlines every day. From sports to politics and from technology to weather reports, all kinds of news in one place.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -13,3 +13,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - It has a search box to search for a specific news
 
 ![specificSearch](./ss/searchFeature.png)
+
+## To-do
+- Move from mysql to postgresql (not getting any free service for mysql)
