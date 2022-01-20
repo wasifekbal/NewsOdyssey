@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  let history = useHistory();
+  let navigate = useNavigate();
 
   const notMode = (mode) => {
     if (mode === "light") {
@@ -22,7 +22,7 @@ const Navbar = (props) => {
     event.preventDefault();
     if (searchQuery) {
       props.handleSearchQuery(searchQuery);
-      history.push("/search");
+      navigate("/search")
     }
   };
 

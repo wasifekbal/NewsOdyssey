@@ -2,7 +2,8 @@ import "./App.css";
 import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import News from "./components/News";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
   };
 
   return (
-    <Router>
+    <>
       <Navbar
         mode={mode}
         changeMode={changeMode}
@@ -41,17 +42,18 @@ export default function App() {
         Progress={Progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      <Switch>
-        <Route exact path="/search">
-        <News
+      <Routes>
+        <Route exact path="/search" element={
+          <News
             key={searchQuery}
             searchQuery={searchQuery}
             mode={mode}
             setProgress={setProgress}
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/">
+        <Route exact path="/" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -60,8 +62,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/general">
+        <Route exact path="/general" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -70,8 +73,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/business">
+        <Route exact path="/business" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -80,8 +84,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/entertainment">
+        <Route exact path="/entertainment" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -90,8 +95,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/health">
+        <Route exact path="/health" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -100,8 +106,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/science">
+        <Route exact path="/science" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -110,8 +117,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/sports">
+        <Route exact path="/sports" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -120,8 +128,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-        <Route exact path="/technology">
+        <Route exact path="/technology" element={
           <News
             mode={mode}
             setProgress={setProgress}
@@ -130,8 +139,9 @@ export default function App() {
             country="in"
             pageSize={pageSize}
           />
+        }>
         </Route>
-      </Switch>
-    </Router>
+      </Routes>
+    </>
   );
 }
