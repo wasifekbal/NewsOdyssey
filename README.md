@@ -13,6 +13,3 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - It has a search box to search for a specific news
 
 ![specificSearch](./ss/searchFeature.png)
-
-## To-do
-- Move from mysql to postgresql (not getting any free service for mysql)
